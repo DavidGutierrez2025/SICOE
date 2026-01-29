@@ -1,0 +1,129 @@
+@page
+@model SICOE.Razor.Pages.Autenticacion.IndexModel
+@{
+    ViewData["Title"] = "Autenticación con FIEL";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-shield-lock"></i> Autenticación con FIEL
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info" role="alert">
+                        <strong><i class="bi bi-info-circle"></i> Seguridad:</strong>
+                        Su FIEL no se almacena en el sistema. Se usa únicamente para obtener el token de autenticación del SAT y se descarta inmediatamente.
+                    </div>
+
+                    <form id="fielForm" novalidate>
+                        <div class="mb-3">
+                            <label for="certificadoFiel" class="form-label">
+                                <strong>Certificado FIEL (.pfx)</strong>
+                            </label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="certificadoFiel" 
+                                   accept=".pfx,.p12"
+                                   required>
+                            <div class="form-text">
+                                Seleccione su archivo de certificado FIEL (.pfx o .p12)
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor seleccione un archivo de certificado FIEL válido.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passwordFiel" class="form-label">
+                                <strong>Contraseña del Certificado</strong>
+                            </label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="passwordFiel" 
+                                       placeholder="Ingrese la contraseña de su certificado FIEL"
+                                       required
+                                       autocomplete="off">
+                                <button class="btn btn-outline-secondary" 
+                                        type="button" 
+                                        id="togglePassword"
+                                        title="Mostrar/Ocultar contraseña">
+                                    <i class="bi bi-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor ingrese la contraseña de su certificado FIEL.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="recordarToken" 
+                                       checked>
+                                <label class="form-check-label" for="recordarToken">
+                                    Recordar token (evita solicitar FIEL repetidamente durante esta sesión)
+                                </label>
+                            </div>
+                            <small class="form-text text-muted">
+                                El token se almacena encriptado y expira automáticamente. Su FIEL nunca se almacena.
+                            </small>
+                        </div>
+
+                        <div id="alertContainer"></div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" 
+                                    class="btn btn-primary btn-lg" 
+                                    id="btnAutenticar"
+                                    disabled>
+                                <span class="spinner-border spinner-border-sm d-none" 
+                                      id="loadingSpinner" 
+                                      role="status" 
+                                      aria-hidden="true"></span>
+                                <span id="btnText">Autenticar con FIEL</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="card mt-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-question-circle"></i> ¿Cómo funciona?
+                    </h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            Su FIEL permanece en su navegador y no se almacena en el servidor.
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            El sistema obtiene un token del SAT usando su FIEL.
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            El token se almacena encriptado y expira automáticamente.
+                        </li>
+                        <li>
+                            <i class="bi bi-check-circle text-success"></i> 
+                            Debe volver a cargar su FIEL en cada nueva sesión.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/fiel-handler.js" asp-append-version="true"></script>
+}
+

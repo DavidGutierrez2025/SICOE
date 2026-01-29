@@ -1,0 +1,6 @@
+@SICOE.API_HostAddress = http://localhost:5173
+
+GET {{SICOE.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

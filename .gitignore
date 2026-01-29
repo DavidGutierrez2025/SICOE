@@ -1,0 +1,67 @@
+## Directorios específicos del proyecto
+context/
+Docs/
+gedinet/
+
+## Logs y archivos temporales
+logs/
+*.log
+*.txt
+!README*.txt
+!LICENSE*.txt
+output_*.txt
+*_Output.txt
+
+## Archivos de configuración sensibles
+keys/
+*.xml
+!*.csproj
+!*.csproj.user
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+## Publish results
+publish/
+out/
+*.Publish.xml
+
+## NuGet
+*.nupkg
+packages/
+!packages/*.config
+
+## ASP.NET
+appsettings.Development.json
+appsettings.Local.json
+
+## IDEs
+*.swp
+*.DS_Store
+.idea/
+.vscode/
+
+## Others
+node_modules/
+dist/
+wwwroot/lib/
+
+## Database files
+*.mdf
+*.ldf
+*.db

@@ -1,0 +1,144 @@
+@page "/CFDI/Procesados"
+@model SICOE.Razor.Pages.CFDIProcesadosModel
+@{
+    ViewData["Title"] = "CFDI Procesados";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-file-invoice me-2"></i> CFDI Procesados
+    </h1>
+    <div>
+        <button class="btn btn-sm btn-primary" id="btnDescargarSeleccionados" style="display: none;">
+            <i class="fas fa-download me-1"></i> Descargar Seleccionados
+        </button>
+    </div>
+</div>
+
+<!-- Filters Card -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h6 class="m-0 font-weight-bold text-primary-custom">Filtros de Búsqueda</h6>
+    </div>
+    <div class="card-body">
+        <form id="formFiltrosCFDI">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">RFC Emisor</label>
+                    <input type="text" class="form-control" id="filtroRfcEmisor" placeholder="RFC Emisor">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">RFC Receptor</label>
+                    <input type="text" class="form-control" id="filtroRfcReceptor" placeholder="RFC Receptor">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Fecha Inicial</label>
+                    <input type="date" class="form-control" id="filtroFechaInicial">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Fecha Final</label>
+                    <input type="date" class="form-control" id="filtroFechaFinal">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary w-100" id="btnBuscarCFDI">
+                        <i class="fas fa-search me-1"></i> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">UUID</label>
+                    <input type="text" class="form-control" id="filtroUuid" placeholder="UUID">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Tipo Comprobante</label>
+                    <select class="form-select" id="filtroTipoComprobante">
+                        <option value="">Todos</option>
+                        <option value="I">Ingreso</option>
+                        <option value="E">Egreso</option>
+                        <option value="T">Traslado</option>
+                        <option value="N">Nómina</option>
+                        <option value="P">Pago</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Solicitud Descarga</label>
+                    <input type="number" class="form-control" id="filtroSolicitudId" placeholder="ID Solicitud">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-secondary w-100" id="btnLimpiarFiltros">
+                        <i class="fas fa-times me-1"></i> Limpiar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Card -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary-custom">CFDI Procesados</h6>
+        <div>
+            <span class="badge bg-info me-2" id="badgeTotalRegistros">0 registros</span>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered mb-0 small">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="py-3 text-center" style="width: 40px;">
+                            <input type="checkbox" id="checkTodos" title="Seleccionar todos">
+                        </th>
+                        <th class="py-3 text-center" style="width: 50px;">Descargar</th>
+                        <th class="py-3">UUID</th>
+                        <th class="py-3">RFC Emisor</th>
+                        <th class="py-3">Nombre Emisor</th>
+                        <th class="py-3">RFC Receptor</th>
+                        <th class="py-3">Fecha Emisión</th>
+                        <th class="py-3 text-end">Total</th>
+                        <th class="py-3">Tipo</th>
+                        <th class="py-3">Serie / Folio</th>
+                        <th class="py-3">Estatus</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCFDI">
+                    <tr>
+                        <td colspan="11" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i> Cargando CFDI...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center p-3 border-top" style="border-color: var(--border-color) !important;">
+            <div>
+                <span class="text-muted small" id="paginacionInfo">Mostrando 0 de 0 registros</span>
+            </div>
+            <div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0" id="paginacion">
+                        <!-- Se genera dinámicamente -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Empty State (oculto por defecto) -->
+<div class="card shadow-sm mb-4" id="emptyState" style="display: none;">
+    <div class="card-body text-center py-5">
+        <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No se encontraron CFDI</h5>
+        <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/cfdi-procesados-handler.js"></script>
+}
+

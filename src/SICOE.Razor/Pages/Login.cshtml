@@ -1,0 +1,259 @@
+@page "/"
+@model SICOE.Razor.Pages.LoginModel
+@{
+    Layout = null; // No layout for Login page to handle full screen bg
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GEDINET SICOE</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <style>
+        body {
+            background-color: var(--primary-color); /* Navy Blue */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 0; 
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .login-image {
+            background-image: url('/images/login-bg.jpg'); /* You might need to add this image or use a placeholder color */
+            background-color: #e9ecef; /* Fallback */
+            background-size: cover;
+            background-position: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-form-container {
+            background-color: var(--bg-card);
+            padding: 3rem;
+        }
+
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .brand-logo h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin: 0;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        .brand-logo h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-login {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .btn-login:hover {
+            background-color: #0a1f3a;
+            color: white;
+        }
+
+        .welcome-text {
+            color: white;
+            text-align: center;
+            margin-top: 2rem;
+            max-width: 800px;
+        }
+        
+        .welcome-text h3 {
+             color: white;
+             font-weight: 600;
+        }
+
+        .welcome-text p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        [data-theme="dark"] .login-form-container {
+            background-color: var(--bg-card);
+        }
+        
+        [data-theme="dark"] .brand-logo h1, 
+        [data-theme="dark"] .brand-logo h2 {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex flex-column align-items-center">
+        
+        <div class="card login-card">
+            <div class="row g-0">
+                <!-- Left Side: Image (Optional, based on user image maybe just centered form?) -->
+                <!-- Based on user image 2, it seems split screen: Left Image, Right Form -->
+                <div class="col-md-6 d-none d-md-block login-image">
+                     <!-- Placeholder for Image -->
+                     <div class="text-center text-muted p-5">
+                         <i class="fas fa-chart-line fa-5x mb-3"></i>
+                         <h4>SICOE</h4>
+                         <p>Sistema de Control de Expedientes</p>
+                     </div>
+                </div>
+
+                <!-- Right Side: Form -->
+                <div class="col-md-6">
+                    <div class="login-form-container h-100 d-flex flex-column justify-content-center">
+                        
+                        <div class="brand-logo">
+                            <h1>GEDINET<span style="font-size: 1rem; vertical-align: super;">®</span></h1>
+                            <h2>Iniciar Sesión</h2>
+                        </div>
+
+                        <form id="fielForm" class="user needs-validation" novalidate>
+                            
+                             <!-- Certificado (.cer) -->
+                            <div class="mb-3">
+                                <label class="form-label small text-muted">Certificado (.cer)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="certificadoCer" readonly placeholder="Seleccionar archivo .cer">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('fileCertificadoCer').click()">...</button>
+                                </div>
+                                <input type="file" class="d-none" id="fileCertificadoCer" accept=".cer" onchange="handleFileSelect('fileCertificadoCer', 'certificadoCer', this)">
+                            </div>
+                            
+                            <!-- Clave Privada (.key) -->
+                            <div class="mb-3">
+                                <label class="form-label small text-muted">Clave Privada (.key)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="clavePrivadaKey" readonly placeholder="Seleccionar archivo .key">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('fileClavePrivadaKey').click()">...</button>
+                                </div>
+                                <input type="file" class="d-none" id="fileClavePrivadaKey" accept=".key" onchange="handleFileSelect('fileClavePrivadaKey', 'clavePrivadaKey', this)">
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label class="form-label small text-muted">Contraseña FIEL</label>
+                                <div class="input-group">
+                                     <input type="password" class="form-control" id="passwordFiel" placeholder="Contraseña" required>
+                                     <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                         <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                     </button>
+                                </div>
+                            </div>
+
+                            <!-- RFC (Auto) -->
+                            <div class="mb-4">
+                                <input type="text" class="form-control" id="rfc" placeholder="RFC (Automático)" readonly 
+                                       style="background-color: var(--bg-body); border: none; text-align: center; font-weight: bold;">
+                            </div>
+                            
+                            <div id="alertContainer"></div>
+
+                            <button type="submit" class="btn btn-login w-100 mb-3" id="btnEnviar">
+                                Ingresar
+                            </button>
+                            
+                            <div class="text-center">
+                                <a href="#" class="small text-muted text-decoration-none">¿Problemas para ingresar?</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-text">
+            <h3>Bienvenido a nuestra comunidad</h3>
+            <p>
+                GEDINET apoya a <strong>clientes</strong> y <strong>consultores</strong> en el seguimiento y conclusión de los <strong>expedientes</strong> 
+                de nuestros <strong>servicios</strong>, además de facilitar la captura y visualización de <strong>informes</strong> por periodo.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/fiel-handler.js" asp-append-version="true"></script>
+
+    <script>
+        // Verificar si ya hay autenticación al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const tokenSat = sessionStorage.getItem('satToken');
+            const fielSession = sessionStorage.getItem('sicoe_fiel_session');
+            
+            // Si ya hay token o FIEL, redirigir a CFDI
+            if (tokenSat || fielSession) {
+                console.log('Ya hay autenticación activa. Redirigiendo a CFDI...');
+                window.location.href = '/CFDI';
+                return;
+            }
+        });
+
+        // Toggle Password Visibility
+        document.getElementById('togglePassword').addEventListener('click', function (e) {
+            e.preventDefault();
+            const passwordInput = document.getElementById('passwordFiel');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // File Selection Helper
+        // NOTA: Esta función solo actualiza el nombre del archivo en el input de texto.
+        // El manejador real de archivos está en fiel-handler.js que lee el contenido y extrae el RFC.
+        function handleFileSelect(fileInputId, textInputId, fileInput) {
+            if (fileInput.files && fileInput.files[0]) {
+                const fileName = fileInput.files[0].name;
+                document.getElementById(textInputId).value = fileName;
+                
+                // CRÍTICO: Si se está cargando un nuevo certificado .cer, limpiar el RFC anterior
+                // para asegurar que se extraiga el RFC del nuevo certificado
+                if (fileInputId === 'fileCertificadoCer') {
+                    const rfcInput = document.getElementById('rfc');
+                    if (rfcInput) {
+                        rfcInput.value = '';
+                        rfcInput.classList.remove('is-valid', 'is-invalid');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

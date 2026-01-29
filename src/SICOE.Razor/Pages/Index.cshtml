@@ -1,0 +1,471 @@
+﻿@page "/CFDI"
+@model IndexModel
+@{
+    ViewData["Title"] = "Descarga de CFDIs";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-file-invoice me-2"></i> Descarga de CFDIs
+    </h1>
+    <div>
+        <span class="badge bg-success">Servicio SAT: En línea</span>
+    </div>
+</div>
+
+<!-- Search/Filter Card - SAT Style -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h6 class="m-0 font-weight-bold text-primary-custom">Buscar CFDI</h6>
+    </div>
+    <div class="card-body">
+        <form id="formBuscarCfdi">
+            <!-- Row 1: Folio Fiscal -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label class="form-label small text-muted">
+                        <input type="radio" name="searchType" value="folio" checked> Folio Fiscal *
+                    </label>
+                    <input type="text" class="form-control" id="folioFiscal" placeholder="FOLIO FISCAL">
+                </div>
+            </div>
+
+            <!-- Row 2: Date Range -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label small text-muted">
+                        <input type="radio" name="searchType" value="dateRange"> Fecha Inicial de Emisión *
+                    </label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="fechaInicial">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row g-1">
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="horaInicial">
+                                        <option value="00">00</option>
+                                        @for(int i = 1; i < 24; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="minutoInicial">
+                                        <option value="00">00</option>
+                                        @for(int i = 1; i < 60; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="segundoInicial">
+                                        <option value="00">00</option>
+                                        @for(int i = 1; i < 60; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small text-muted">Fecha Final de Emisión *</label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="fechaFinal">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row g-1">
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="horaFinal">
+                                        <option value="23">23</option>
+                                        @for(int i = 0; i < 24; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="minutoFinal">
+                                        <option value="59">59</option>
+                                        @for(int i = 0; i < 60; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select class="form-select form-select-sm" id="segundoFinal">
+                                        <option value="59">59</option>
+                                        @for(int i = 0; i < 60; i++) {
+                                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: RFC Fields -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">RFC Receptor</label>
+                    <input type="text" class="form-control" id="rfcReceptor" placeholder="RFC RECEPTOR">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">RFC a cuenta terceros</label>
+                    <input type="text" class="form-control" id="rfcTerceros" placeholder="RFC A CUENTA TERCEROS">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">Estado del Comprobante</label>
+                    <select class="form-select" id="estadoComprobante">
+                        <option value="">Seleccione un valor...</option>
+                        <option value="vigente">Vigente</option>
+                        <option value="cancelado">Cancelado</option>
+                        <option value="todos">Todos</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 4: Tipo Comprobante & Button -->
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <label class="form-label small text-muted">Tipo de Comprobante (Complemento)</label>
+                    <select class="form-select" id="tipoComprobante">
+                        <option value="">Seleccione un valor...</option>
+                        <option value="I">Ingreso</option>
+                        <option value="E">Egreso</option>
+                        <option value="T">Traslado</option>
+                        <option value="N">Nómina</option>
+                        <option value="P">Pago</option>
+                    </select>
+                    <small class="text-muted">(Criterio de búsqueda aplicable a CFDI emitidas a partir del 01/01/2014)</small>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary w-100" id="btnBuscarCfdi">
+                        <i class="fas fa-search me-1"></i> Buscar CFDI
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <small class="text-muted">* Campos obligatorios</small>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Card - Recuperar descargas de CFDI -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary-custom">Recuperar descargas de CFDI</h6>
+        <button class="btn btn-sm btn-success" id="btnNuevaSolicitud">
+            <i class="fas fa-plus me-1"></i> Nueva Solicitud
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="alert alert-info m-3" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            En esta consulta se podrán recuperar solicitudes de descargas de CFDI y metadata de los últimos 30 días (1 mes).
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered mb-0 small">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="py-3 text-center">Acciones</th>
+                        <th class="py-3">Folio de Descarga</th>
+                        <th class="py-3">RFC Contribuyente</th>
+                        <th class="py-3">Tipo Descarga</th>
+                        <th class="py-3 text-center">Estado</th>
+                        <th class="py-3 text-center">Cantidad de Documentos</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaSolicitudes">
+                    <!-- Los datos se cargan dinámicamente desde el API -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center p-3 border-top" style="border-color: var(--border-color) !important;">
+            <div class="text-muted small" id="contadorRegistros">
+                Cargando...
+            </div>
+            <nav aria-label="Paginación de resultados">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="p-4 text-center text-muted" id="emptyState" style="display:none;">
+            <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+            <p>No hay solicitudes de descarga en los últimos 3 días.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/fiel-helper.js"></script>
+    <script src="~/js/fiel-helper.js"></script>
+    <script src="~/js/descarga-handler.js"></script>
+    <script src="~/js/nueva-solicitud-handler.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Verificar autenticación antes de continuar
+            // Si no hay FIEL en sessionStorage o está expirada, redirigir a Login
+            // obtenerFielParaEnvio() verificará automáticamente si la sesión expiró y redirigirá
+            if (typeof obtenerFielParaEnvio === 'function') {
+                const fielData = obtenerFielParaEnvio(); // Esto redirigirá automáticamente si la sesión expiró
+                if (!fielData) {
+                    // Si no hay redirección automática (caso raro), redirigir manualmente
+                    console.log('No hay FIEL disponible. Redirigiendo a Login...');
+                    window.location.href = '/';
+                    return; // Detener ejecución del resto del script
+                }
+                console.log('Autenticación verificada. FIEL disponible para RFC:', fielData.rfc || 'N/A');
+            } else {
+                // Fallback si la función no está disponible
+                const fielSession = sessionStorage.getItem('sicoe_fiel_session');
+                if (!fielSession) {
+                    console.log('No hay FIEL en sesión. Redirigiendo a Login...');
+                    window.location.href = '/';
+                    return;
+                }
+            }
+            
+            // Initialize date fields with current date
+            const today = new Date().toISOString().split('T')[0];
+            $('#fechaInicial').val(today);
+            $('#fechaFinal').val(today);
+
+            // Handle search type radio buttons
+            $('input[name="searchType"]').on('change', function() {
+                if ($(this).val() === 'folio') {
+                    $('#folioFiscal').prop('disabled', false).focus();
+                    $('#fechaInicial, #fechaFinal').prop('disabled', true);
+                } else {
+                    $('#folioFiscal').prop('disabled', true);
+                    $('#fechaInicial, #fechaFinal').prop('disabled', false);
+                }
+            });
+
+            // Buscar CFDI button
+            $('#btnBuscarCfdi').on('click', function() {
+                // TODO: Implement search logic
+                alert('Funcionalidad de búsqueda en desarrollo');
+            });
+
+            // Nueva Solicitud button
+            $('#btnNuevaSolicitud').on('click', function() {
+                if (typeof abrirModalNuevaSolicitud === 'function') {
+                    abrirModalNuevaSolicitud();
+                } else {
+                    console.error('La función abrirModalNuevaSolicitud no está disponible. Asegúrese de que nueva-solicitud-handler.js esté cargado.');
+                    alert('Error: No se pudo abrir el formulario de nueva solicitud');
+                }
+            });
+
+            // Cargar solicitudes al iniciar la página
+            // Intentar múltiples formas de acceder a la función para mayor robustez
+            if (typeof window.cargarSolicitudes === 'function') {
+                window.cargarSolicitudes();
+            } else if (typeof cargarSolicitudes === 'function') {
+                cargarSolicitudes();
+            } else {
+                console.warn('La función cargarSolicitudes no está disponible. Asegúrese de que descarga-handler.js esté cargado.');
+                // Reintentar después de un pequeño delay por si los scripts aún se están cargando
+                setTimeout(() => {
+                    if (typeof window.cargarSolicitudes === 'function') {
+                        window.cargarSolicitudes();
+                    } else if (typeof cargarSolicitudes === 'function') {
+                        cargarSolicitudes();
+                    }
+                }, 500);
+            }
+
+            // Conectar botones de descarga (delegación de eventos para elementos dinámicos)
+            // NOTA: Los botones ahora tienen sus propios event handlers asignados en descarga-handler.js
+            // Este event listener es un fallback por si acaso, pero normalmente no se usará
+            $('#tablaSolicitudes').on('click', 'button[data-solicitud-id].btn-primary', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const solicitudId = $(this).data('solicitud-id');
+                if (solicitudId) {
+                    if (typeof descargarPaquete === 'function') {
+                        descargarPaquete(solicitudId, e);
+                    } else {
+                        alert('La función descargarPaquete no está disponible.');
+                    }
+                } else {
+                    alert('No se pudo identificar la solicitud. Asegúrese de que la tabla se genere correctamente.');
+                }
+            });
+        });
+    </script>
+}
+
+<!-- Modal para Nueva Solicitud -->
+<div class="modal fade" id="modalNuevaSolicitud" tabindex="-1" aria-labelledby="modalNuevaSolicitudLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalNuevaSolicitudLabel">
+                    <i class="fas fa-file-download me-2"></i> Nueva Solicitud de Descarga de CFDI
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevaSolicitud">
+                    <!-- Selector de Año y Mes -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudAnio" class="form-label">
+                                Año <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="modalNuevaSolicitudAnio" required>
+                                <!-- Se llenará dinámicamente con JavaScript -->
+                            </select>
+                            <small class="text-muted">Año del mes calendario a descargar</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudMes" class="form-label">
+                                Mes <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="modalNuevaSolicitudMes" required>
+                                <option value="">Seleccione un mes...</option>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                            <small class="text-muted">Mes calendario completo (del día 1 al último día del mes)</small>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mb-3" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Nota:</strong> Las fechas se calcularán automáticamente para el mes calendario completo seleccionado (del día 1 al último día del mes).
+                    </div>
+                    <!-- Fechas -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudFechaInicial" class="form-label">
+                                Fecha Inicial <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="modalNuevaSolicitudFechaInicial" required>
+                            <small class="text-muted">Fecha inicial del rango de búsqueda</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudFechaFinal" class="form-label">
+                                Fecha Final <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="modalNuevaSolicitudFechaFinal" required>
+                            <small class="text-muted">Fecha final del rango de búsqueda</small>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Comprobante -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudTipoComprobante" class="form-label">
+                                Tipo de Comprobante
+                            </label>
+                            <select class="form-select" id="modalNuevaSolicitudTipoComprobante">
+                                <option value="">Todos los tipos</option>
+                                <option value="I">Ingreso</option>
+                                <option value="E">Egreso</option>
+                                <option value="T">Traslado</option>
+                                <option value="N">Nómina</option>
+                                <option value="P">Pago</option>
+                            </select>
+                            <small class="text-muted">Opcional: Filtrar por tipo de comprobante</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudEstadoComprobante" class="form-label">
+                                Estado del Comprobante
+                            </label>
+                            <select class="form-select" id="modalNuevaSolicitudEstadoComprobante">
+                                <option value="Vigente" selected>Vigente</option>
+                                <option value="Todos">Todos</option>
+                                <option value="Cancelado" disabled title="El SAT no permite descargar comprobantes cancelados">Cancelado (No permitido por el SAT)</option>
+                            </select>
+                            <small class="text-muted">Estado de los comprobantes a descargar. <strong>Nota:</strong> El SAT no permite descargar comprobantes cancelados.</small>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Descarga -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="modalNuevaSolicitudTipoDescarga" class="form-label">
+                                Tipo de Descarga <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="modalNuevaSolicitudTipoDescarga" required>
+                                <option value="recibidos" selected>CFDI Recibidos</option>
+                                <option value="emitidos">CFDI Emitidos</option>
+                            </select>
+                            <small class="text-muted">
+                                <strong>Recibidos:</strong> CFDI que usted recibió (facturas de proveedores). 
+                                <strong>Emitidos:</strong> CFDI que usted emitió (facturas a clientes).
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- RFCs (condicional según tipo de descarga) -->
+                    <div class="row mb-3" id="rowRfcRecibidos">
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudRfcEmisor" class="form-label">
+                                RFC Emisor (Filtrar por)
+                            </label>
+                            <input type="text" class="form-control" id="modalNuevaSolicitudRfcEmisor" 
+                                   placeholder="RFC del emisor (opcional)" maxlength="13">
+                            <small class="text-muted">Opcional: Si no se proporciona, se descargan todos los CFDI recibidos</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 d-none" id="rowRfcEmitidos">
+                        <div class="col-md-6">
+                            <label for="modalNuevaSolicitudRfcReceptor" class="form-label">
+                                RFC Receptor (Filtrar por)
+                            </label>
+                            <input type="text" class="form-control" id="modalNuevaSolicitudRfcReceptor" 
+                                   placeholder="RFC del receptor (opcional)" maxlength="13">
+                            <small class="text-muted">Opcional: Si se proporciona, se descargan solo los CFDI emitidos a ese receptor</small>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Nota:</strong> Se utilizará la FIEL guardada en la sesión para obtener un token SAT y firmar la solicitud. Si la sesión expiró, deberá autenticarse nuevamente.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnEnviarSolicitud" onclick="crearNuevaSolicitud()">
+                    <i class="fas fa-paper-plane me-1"></i> Enviar Solicitud
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

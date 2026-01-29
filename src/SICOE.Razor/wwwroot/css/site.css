@@ -1,0 +1,275 @@
+:root {
+  /* GEDINET Corporate Theme */
+  --primary-color: #0f2d52;
+  /* Navy Blue */
+  --primary-color-hover: #0a1f3a;
+  --secondary-color: #ffffff;
+  --accent-color: #0d6efd;
+  /* Bootstrap blue for actions */
+  --bg-body: #f4f6f9;
+  --bg-card: #ffffff;
+  --bg-sidebar: #0f2d52;
+
+  --text-main: #333333;
+  --text-muted: #6c757d;
+  --text-light: #f8f9fa;
+
+  --border-color: #e3e6f0;
+  --input-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --primary-color: #1ee0ff;
+  /* GEDINET Cyan/Blue Highlight */
+  --primary-color-hover: #47e7ff;
+
+  --bg-body: #001929;
+  /* GEDINET Dark Navy Background */
+  --bg-card: #00263e;
+  /* GEDINET Lighter Navy for Cards */
+  --bg-sidebar: #001929;
+  /* Sidebar matches body or stays dark */
+
+  --text-main: #c2c2c2;
+  /* GEDINET Light Gray Text */
+  --text-muted: #888888;
+  --text-light: #ffffff;
+
+  --border-color: #0a3a5c;
+  /* Navy Border */
+  --input-bg: #00263e;
+}
+
+/* Dark Mode Overrides for Cards and Tables */
+[data-theme="dark"] .card {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .card-header {
+  background-color: var(--bg-card) !important;
+  border-bottom-color: var(--border-color);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .card-body {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .table {
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .table thead {
+  background-color: #003a5c !important;
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .table-light {
+  background-color: #003a5c !important;
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .table-hover tbody tr:hover {
+  background-color: #004a6c;
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .table-bordered {
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .table-bordered td,
+[data-theme="dark"] .table-bordered th {
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .alert-info {
+  background-color: #004a6c;
+  border-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  background-color: var(--input-bg);
+  border-color: var(--primary-color);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+/* Additional table styling for dark mode */
+[data-theme="dark"] .table tbody {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .table tbody tr {
+  background-color: var(--bg-card);
+}
+
+[data-theme="dark"] .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #003550;
+}
+
+[data-theme="dark"] .table tbody td,
+[data-theme="dark"] .table tbody th {
+  background-color: transparent;
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .bg-light {
+  background-color: #003a5c !important;
+}
+
+[data-theme="dark"] .text-dark {
+  color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .text-gray-800 {
+  color: var(--text-main) !important;
+}
+
+/* GEDINET-style thead-light for dark mode */
+[data-theme="dark"] .table .thead-light th,
+[data-theme="dark"] .thead-light th {
+  color: #E0E2E5 !important;
+  background-color: #3B4F63 !important;
+  border-color: #5b6d7e !important;
+}
+
+[data-theme="dark"] .table-light thead,
+[data-theme="dark"] .table-light th {
+  color: #E0E2E5 !important;
+  background-color: #3B4F63 !important;
+  border-color: #5b6d7e !important;
+}
+
+/* Pagination dark mode */
+[data-theme="dark"] .pagination .page-link {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #001929;
+}
+
+[data-theme="dark"] .pagination .page-item.disabled .page-link {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .pagination .page-link:hover {
+  background-color: #003a5c;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-main);
+}
+
+.text-primary-custom {
+  color: var(--primary-color);
+}
+
+/* Cards */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+[data-theme="dark"] .card {
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.btn-primary-custom {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-primary-custom:hover {
+  background-color: var(--primary-color-hover);
+  border-color: var(--primary-color-hover);
+  color: #fff;
+}
+
+/* Forms */
+.form-control {
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.form-control:focus {
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Utility */
+.bg-primary-custom {
+  background-color: var(--primary-color) !important;
+}
+
+.text-light-custom {
+  color: var(--text-light) !important;
+}
+
+/* Helpers for Login Page specific overrides */
+.login-bg {
+  background-color: var(--primary-color);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-icon {
+  cursor: help;
+  color: var(--text-muted);
+}
